@@ -68,7 +68,7 @@ bool testComparisonOperators()
 	comparisonResult = (healthPoints1 == healthPoints2); /* returns true */
 	testResult = testResult && comparisonResult;
 
-	healthPoints2 = HealthPoints(150); /* has 150 points out of 100 */
+	healthPoints2 = HealthPoints(150); /* has 150 points out of 150 */
 	comparisonResult = (healthPoints1 == healthPoints2); /* returns false */
 	testResult = testResult && !comparisonResult;
 
