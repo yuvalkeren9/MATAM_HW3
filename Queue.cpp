@@ -3,6 +3,12 @@
 //
 
 #include "Queue.h"
-
+int main(){
+    Queue<int> queue;
+    queue.pushBack(1);
+    queue.pushBack(2);
+    queue.getLastNode();
+    return 0;
+};
 /**implentation of list*/
 
