@@ -20,8 +20,11 @@ public:
     T& front() const;
     void popFront();
     int size() const;
-    Queue<T>::Node* getLastNode() const;
 
+
+    Queue<T>::Node* getLastNode() const;
+    T getData() const;                  //delete my friend
+    void checkingIterator() const;
 
     Iterator begin() const;
     Iterator end() const;
@@ -66,11 +69,17 @@ T& Queue<T>::front() const{
 
 template<class T>
 void Queue<T>::popFront(){
-    if(this->m_size!=0){
-        Queue<T>::Node temp= this->m_head->m_next;
-        this->m_head = temp.m_next;
-        delete temp;
-        this->m_size--;
+    if(this->m_size!=0) {
+        if (this->m_size == 1) {
+            delete m_head;
+            m_head = nullptr;
+            m_size = 0;
+        } else {
+            Queue<T>::Node* temp = this->m_head;
+            this->m_head = this->m_head->m_next;
+            delete temp;
+            this->m_size--;
+        }
     }
 }
 
@@ -83,13 +92,31 @@ int Queue<T>::size() const{
 /***------------Queue begin--------------***/
 template<class T>
 typename Queue<T>::Iterator Queue<T>::begin() const {
-    return Iterator(this, this->m_head);
+    Iterator it(this, this->m_head);
+    return it;
 }
 /***------------Queue end--------------***/
 template<class T>
 typename Queue<T>::Iterator Queue<T>::end() const {
     return Iterator(this, nullptr);
 }
+
+
+/***------------Fucntions for testing Queue--------------***/
+template <class T>
+T Queue<T>::getData() const {
+    return this->m_head->m_data;
+}
+
+template <class T>
+void Queue<T>::checkingIterator() const{
+    for (Iterator it = this->begin(); it != this->end(); ++it ){
+        cout << it.m_ptrToNode->m_data << endl;
+
+    }
+
+}
+
 /***------------Queue global functions--------------***/
 template<class T,class C>
         Queue<T> filter(Queue<T> queue ,C condition)
@@ -105,10 +132,11 @@ class Queue<T>::Iterator{
 private:
     const Queue<T>* m_queue;
     Node* m_ptrToNode;
-    friend class Queue<T>::Node;
-
     Iterator(const Queue<T>* queue, Node* ptrToNode);
+    friend class Queue<T>::Node;
+    friend class Queue<T>;
 public:
+
     T& operator*() const;
     Iterator& operator++();
     bool operator!=(const Queue<T>::Iterator& iterator);
