@@ -7,19 +7,19 @@
 template<class T>
 class Queue {
 private:
-    class List;
-    Queue<T>::List  *m_head;
+    class Node;
+    Queue<T>::Node* m_head;
     int m_size;
 
 public:
     Queue();
-    ~Queue()=default;
-    Queue(Queue& queue)=delete;
+    ~Queue();
+    Queue(Queue& queue) = delete;
     void pushBack(T objectToPush);
     T& front() const;
     void popFront();
     int size() const;
-    Queue<T>::List* getLastNode() const;
+    Queue<T>::Node* getLastNode() const;
 
     class Iterator;
     Iterator begin() const;
@@ -30,11 +30,12 @@ public:
 template<class T>
 Queue<T>::Queue():m_head(nullptr),m_size(0) {}
 
+
 /*
 template<class T>
 void Queue<T>::pushBack(T objectToPush) {                   //old
-    Queue<T>::List node(objectToPush);
-    Queue<T>::List* temp= this->getLastNode();
+    Queue<T>::Node node(objectToPush);
+    Queue<T>::Node* temp= this->getLastNode();
     *temp->m_next= node;
     this->m_size++;
 }
@@ -42,8 +43,8 @@ void Queue<T>::pushBack(T objectToPush) {                   //old
 
 template<class T>
 void Queue<T>::pushBack(T objectToPush) {                   //allocate dymnic ?
-    Queue<T>::List* node = new Queue<T>::List(objectToPush);
-    Queue<T>::List *currentLastNode = this->getLastNode();
+    Queue<T>::Node* node = new Queue<T>::Node(objectToPush);
+    Queue<T>::Node *currentLastNode = this->getLastNode();
     *currentLastNode->m_next = node;
     this->m_size++;
 }
@@ -58,7 +59,7 @@ T& Queue<T>::front() const{
 template<class T>
 void Queue<T>::popFront(){
     if(this->m_size!=0){
-        Queue<T>::List temp= this->m_head->m_next;
+        Queue<T>::Node temp= this->m_head->m_next;
         this->m_head = temp.m_next;
         delete temp;
         this->m_size--;
@@ -83,30 +84,64 @@ template<class T,class C>
 template<class T>
 class Queue<T>::Iterator{
 private:
-    Iterator(const Queue<T>* queue, int index);
-    const Queue<T>* queue;
-    T* ptrToNode;
+    const Queue<T>* m_queue;
+    Node* m_ptrToNode;
+    friend class Queue<T>::Node;
+
+    Iterator(const Queue<T>* queue, Node* ptrToNode);
 public:
+    T& operator*() const;
+    Iterator& operator++();
+    bool operator!=(const Queue<T>::Iterator& iterator);
+
+
 
 };
+/** constructor of Iterator */
+template <class T>
+Queue<T>::Iterator::Iterator(const Queue<T>* queue, Node* ptrToNode) : m_queue(queue), m_ptrToNode(ptrToNode){
+        };
 
 
+/** opertator* of Iterator */
+template <class T>
+T& Queue<T>::Iterator::operator*() const {
+    Node* ptr = m_ptrToNode;
+    return m_ptrToNode->m_data;
+}
+
+/** opertator++ of Iterator */
+template <class T>
+typename Queue<T>::Iterator& Queue<T>::Iterator::operator++(){
+    m_ptrToNode = m_ptrToNode->m_next;
+    return *this;
+}
+/** opertator!= of Iterator */
+template <class T>
+bool Queue<T>::Iterator::operator!=(const Queue<T>::Iterator& iterator) {
+    return (this->m_ptrToNode != iterator.m_ptrToNode);
+}
 
 
-/***-----------list implication------------***/
+/***-----------Node implication------------***/
 template<class T>
-class Queue<T>::List{
+class Queue<T>::Node{
 public:
-    ~List()=default;
-    List (const List& list ) = delete;
+    ~Node()=default;
+    Node (const Node& Node ) = delete;
 private:
     T m_data;
-    List *m_next;
-    explicit List(T data);
+    Node *m_next;
+    explicit Node(T data);
     friend class Queue<T>;
+    friend class Queue<T>::Iterator;
 };
+
+
+/***-----------Node methods------------***/
+
 template<class T>
-Queue<T>::List::List(T data):m_data(data){
+Queue<T>::Node::Node(T data):m_data(data){
     m_next=nullptr;
 }
 
@@ -117,8 +152,8 @@ Queue<T>::List::List(T data):m_data(data){
 
 /**---------------helper function-------------**/
 template<class T>
-typename Queue<T>::List* Queue<T>::getLastNode() const{//check for typename
-    Queue<T>::List * temp= this->m_head;
+typename Queue<T>::Node* Queue<T>::getLastNode() const{//check for typename
+    Queue<T>::Node * temp= this->m_head;
     while (temp!= nullptr)
     {
         temp=temp->m_next;
