@@ -30,13 +30,24 @@ public:
 template<class T>
 Queue<T>::Queue():m_head(nullptr),m_size(0) {}
 
+/*
 template<class T>
-void Queue<T>::pushBack(T objectToPush) {
+void Queue<T>::pushBack(T objectToPush) {                   //old
     Queue<T>::List node(objectToPush);
     Queue<T>::List* temp= this->getLastNode();
     *temp->m_next= node;
     this->m_size++;
 }
+*/
+
+template<class T>
+void Queue<T>::pushBack(T objectToPush) {                   //allocate dymnic ?
+    Queue<T>::List* node = new Queue<T>::List(objectToPush);
+    Queue<T>::List *currentLastNode = this->getLastNode();
+    *currentLastNode->m_next = node;
+    this->m_size++;
+}
+
 template<class T>
 T& Queue<T>::front() const{
     if(this->m_size==0)
@@ -70,12 +81,14 @@ template<class T,class C>
 
 /***-----------Iterator implication------------***/
 template<class T>
-        class Queue<T>::Iterator{
-        private:
-            Iterator(const Queue<T>&);
-        public:
+class Queue<T>::Iterator{
+private:
+    Iterator(const Queue<T>* queue, int index);
+    const Queue<T>* queue;
+    T* ptrToNode;
+public:
 
-        };
+};
 
 
 
@@ -84,11 +97,13 @@ template<class T>
 template<class T>
 class Queue<T>::List{
 public:
-    explicit List(T data);
     ~List()=default;
-    List (const List& list ) =delete;
+    List (const List& list ) = delete;
+private:
     T m_data;
     List *m_next;
+    explicit List(T data);
+    friend class Queue<T>;
 };
 template<class T>
 Queue<T>::List::List(T data):m_data(data){
