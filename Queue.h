@@ -10,6 +10,7 @@ private:
     class Node;
     Queue<T>::Node* m_head;
     int m_size;
+    class Iterator;
 
 public:
     Queue();
@@ -21,33 +22,40 @@ public:
     int size() const;
     Queue<T>::Node* getLastNode() const;
 
-    class Iterator;
+
     Iterator begin() const;
     Iterator end() const;
 
 };
 /***------------Queue methods--------------***/
+
+/** Queue Constructor */
 template<class T>
 Queue<T>::Queue():m_head(nullptr),m_size(0) {}
 
-
-/*
+/** Queue Destructor */
 template<class T>
-void Queue<T>::pushBack(T objectToPush) {                   //old
-    Queue<T>::Node node(objectToPush);
-    Queue<T>::Node* temp= this->getLastNode();
-    *temp->m_next= node;
-    this->m_size++;
+Queue<T>::~Queue(){
+    while(this->m_head!= nullptr) {
+        Node* toDelete = this->m_head;
+        this->m_head = this->m_head->m_next;
+        delete toDelete;
+    }
 }
-*/
 
 template<class T>
 void Queue<T>::pushBack(T objectToPush) {                   //allocate dymnic ?
     Queue<T>::Node* node = new Queue<T>::Node(objectToPush);
     Queue<T>::Node *currentLastNode = this->getLastNode();
-    *currentLastNode->m_next = node;
+    if (currentLastNode == nullptr){
+        m_head = node;
+        this->m_size++;
+        return;
+    }
+    currentLastNode->m_next = node;
     this->m_size++;
 }
+
 
 template<class T>
 T& Queue<T>::front() const{
@@ -71,6 +79,17 @@ int Queue<T>::size() const{
     return this->m_size;
 }
 
+
+/***------------Queue begin--------------***/
+template<class T>
+typename Queue<T>::Iterator Queue<T>::begin() const {
+    return Iterator(this, this->m_head);
+}
+/***------------Queue end--------------***/
+template<class T>
+typename Queue<T>::Iterator Queue<T>::end() const {
+    return Iterator(this, nullptr);
+}
 /***------------Queue global functions--------------***/
 template<class T,class C>
         Queue<T> filter(Queue<T> queue ,C condition)
@@ -106,7 +125,6 @@ Queue<T>::Iterator::Iterator(const Queue<T>* queue, Node* ptrToNode) : m_queue(q
 /** opertator* of Iterator */
 template <class T>
 T& Queue<T>::Iterator::operator*() const {
-    Node* ptr = m_ptrToNode;
     return m_ptrToNode->m_data;
 }
 
@@ -153,8 +171,11 @@ Queue<T>::Node::Node(T data):m_data(data){
 /**---------------helper function-------------**/
 template<class T>
 typename Queue<T>::Node* Queue<T>::getLastNode() const{//check for typename
-    Queue<T>::Node * temp= this->m_head;
-    while (temp!= nullptr)
+    if (this->m_head == nullptr){
+        return m_head;
+    }
+    Queue<T>::Node* temp= this->m_head;
+    while (temp->m_next!= nullptr)
     {
         temp=temp->m_next;
     }
