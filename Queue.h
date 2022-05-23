@@ -20,17 +20,23 @@ private:
 public:
     Queue();
     ~Queue();
-    //Queue(Queue& queue) = delete;
     Queue(const Queue<T>& queue);
-
-
     Queue<T>& operator=(const Queue<T>& queue);
+
+
+
+
     void pushBack(T objectToPush);
     T& front() const;
     void popFront();
     int size() const;
     Queue<T>::Node* getLastNode() const;
-    T getData() const;                  //delete my friend
+    T getData() const;//delete my friend
+
+
+      friend bool operator==(const Queue<T>& queue1,const Queue<T>& queue2);
+
+
     void checkingIterator() const;
     Iterator begin() const;
     Iterator end() const;
@@ -67,13 +73,18 @@ Queue<T>::Queue(const Queue<T> &queue) :m_size(queue.size()){
 /** operator = of Queue*/
 template<class T>
 Queue<T>& Queue<T>::operator=(const Queue<T>& queue){
-    //self assigment
+    if(this == &queue)
+    {
+        return  *this;
+    }
     m_size = queue.size();
     for (Iterator it = queue.begin(); it != queue.end(); ++it){
         this->pushBack(*it);
     }
     return *this;
 }
+
+
 
 template<class T>
 void Queue<T>::pushBack(T objectToPush) {
