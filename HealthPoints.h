@@ -12,8 +12,7 @@ using std::endl;
 
 class HealthPoints {
 public:
-    explicit HealthPoints(int maxHP= defaultMaxHP);
-
+    HealthPoints(int maxHP= defaultMaxHP);
     HealthPoints& operator+=(const int number);
     HealthPoints& operator-=(const int number);
     friend bool operator==(const HealthPoints& healthPoints1,const HealthPoints& healthPoints2);
