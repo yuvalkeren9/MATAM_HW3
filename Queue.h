@@ -125,7 +125,7 @@ void Queue<T>::checkingIterator() const{
 
 /***------------Queue global functions--------------***/
 template<class T, class Condition>
-        Queue<T> filter(const Queue<T> &queue ,const Condition c)
+        Queue<T> filter(const Queue<T> &queue ,Condition c)
 {
             Queue<T> newQueue;
             for(const T& data : queue){
@@ -136,6 +136,13 @@ template<class T, class Condition>
 
 }
 
+template<class T, class transformation>
+void transform(Queue<T> &queue ,transformation transform)
+{
+    for(const T& data : queue){
+        transform(data);
+    }
+}
 
 
 
