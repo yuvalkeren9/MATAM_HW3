@@ -8,12 +8,14 @@
 
 class HealthPoints {
 public:
-explicit HealthPoints(int maxHP=100);
+    explicit HealthPoints(int maxHP= defaultMmaxHP);
+
 
 
     class InvalidArgument{};
 
 private:
+    static int defaultMaxHP = 100;
     int m_currentHP;
     int m_MaxHP;
 };
