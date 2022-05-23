@@ -128,16 +128,18 @@ template<class T, class Condition>
         Queue<T> filter(const Queue<T> &queue ,Condition c)
 {
             Queue<T> newQueue;
-            for(const T& data : queue){
-                if(c(data)== true)
+            for(const T& data : queue) {
+                if (c(data) == true){
                     newQueue.pushBack(data);
+                }
+
             }
     return newQueue;
 
 }
 
-template<class T, class transformation>
-void transform(Queue<T> &queue ,transformation transform)
+template<class T, class Transformation>
+void transform(Queue<T> &queue ,Transformation transform)
 {
     for(const T& data : queue){
         transform(data);
