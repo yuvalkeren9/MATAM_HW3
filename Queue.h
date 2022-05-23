@@ -62,9 +62,10 @@ void Queue<T>::pushBack(T objectToPush) {                   //allocate dymnic ?
 
 template<class T>
 T& Queue<T>::front() const{
-    if(this->m_size==0)
-        return nullptr ;//check in piazza
-    return this->m_head->m_next->m_data;
+    //if(this->m_size==0) {
+    //    return nullptr;//check in piazza
+    //}
+        return this->m_head->m_data;
 }
 
 template<class T>
