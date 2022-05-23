@@ -16,7 +16,8 @@ int main(){
     int swag = queue.getData();
     queue.checkingIterator();
     cout << queue.front() << endl;
-    return 0;
+    int a=queue.front();
+
 }
 /**implentation of list*/
 

@@ -4,6 +4,11 @@
 
 #ifndef HW3_QUEUE_H
 #define HW3_QUEUE_H
+
+#include <iostream>
+using std::endl;
+using std::cout;
+
 template<class T>
 class Queue {
 private:
@@ -119,12 +124,19 @@ void Queue<T>::checkingIterator() const{
 }
 
 /***------------Queue global functions--------------***/
-template<class T,class C>
-        Queue<T> filter(Queue<T> queue ,C condition)
+template<class T, class Condition>
+        Queue<T> filter(const Queue<T> &queue ,const Condition c)
 {
             Queue<T> newQueue;
+            for(const T& data : queue){
+                if(c(data)== true)
+                    newQueue.pushBack(data);
+            }
+    return newQueue;
 
 }
+
+
 
 
 /***-----------Iterator implication------------***/
