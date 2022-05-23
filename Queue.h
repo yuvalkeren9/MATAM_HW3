@@ -15,9 +15,10 @@ private:
     class Node;
     Queue<T>::Node* m_head;
     int m_size;
-    class Iterator;
+
 
 public:
+    class Iterator;
     Queue();
     ~Queue();
     Queue(const Queue<T>& queue);
