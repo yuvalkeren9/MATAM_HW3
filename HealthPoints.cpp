@@ -114,6 +114,20 @@ bool operator>=(const HealthPoints& healthPoints1, const HealthPoints& healthPoi
 }
 
 std::ostream& operator<<(std::ostream& os, HealthPoints toPrint){
-    os << toPrint.getCurrentHP()<< "(" <<toPrint.getMaxHP()<< ")" << endl;
+    os << toPrint.getCurrentHP()<< '(' <<toPrint.getMaxHP()<< ')';
     return os;
 }
+
+
+
+//int main (){
+//    try {
+//        HealthPoints healthpoints1;
+//        HealthPoints healthpoints2(150);
+//        cout << healthpoints1 << endl;
+//        cout << healthpoints2 << endl;
+//    } catch (HealthPoints::InvalidArgument& e){
+//        cout << "I caught the problem!" << endl;
+//    }
+//
+//}

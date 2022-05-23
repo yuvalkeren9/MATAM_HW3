@@ -62,13 +62,13 @@ Queue<T>::~Queue(){
 
 /**  copy constructor Queue*/
 
-template<class T>
+template<class T>                          //MAKING CHANGE HERE
 Queue<T>::Queue(const Queue<T> &queue) :m_size(queue.size()), m_head(nullptr){
     try {
-        for (Iterator it = queue.begin(); it != queue.end(); ++it) {
+        for (ConstIterator it = queue.begin(); it != queue.end(); ++it) {
             this->pushBack(*it);
         }
-    } catch (typename Queue<T>::Iterator::InvalidOperation& e){}
+    } catch (typename Queue<T>::ConstIterator::InvalidOperation& e){}
 }
 
 
@@ -93,10 +93,10 @@ Queue<T>& Queue<T>::operator=(const Queue<T>& queue) {
     }
     m_size = queue.size();
     try {
-        for (Iterator it = queue.begin(); it != queue.end(); ++it) {
+        for (ConstIterator it = queue.begin(); it != queue.end(); ++it) {
             this->pushBack(*it);
         }
-    } catch (typename Queue<T>::Iterator::InvalidOperation& e){}
+    } catch (typename Queue<T>::ConstIterator::InvalidOperation& e){}
     return *this;
 
 }
@@ -188,12 +188,17 @@ void Queue<T>::checkingIterator() const{
         for (Iterator it = this->begin(); it != this->end(); ++it ){
             cout << it.m_ptrToNode->m_data << endl;
         }
-    } catch (typename Queue<T>::Iterator::InvalidOperation& e){}
+    } catch (typename Queue<T>::Iterator::InvalidOperation& e){
+
+    }
+    catch (typename Queue<T>::ConstIterator::InvalidOperation& e){
+
+    }
 }
 
 /***------------Queue global functions--------------***/
 template<class T, class Condition>
-Queue<T> filter(const Queue<T> &queue ,Condition condition)
+Queue<T> filter(Queue<T> &queue ,Condition condition)    //deleted const here
 {
             Queue<T> newQueue;
             for(T& data : queue) {
