@@ -20,17 +20,18 @@ private:
 public:
     Queue();
     ~Queue();
-    Queue(Queue& queue) = delete;
+    //Queue(Queue& queue) = delete;
+    Queue(const Queue<T>& queue);
+
+
+    Queue<T>& operator=(const Queue<T>& queue);
     void pushBack(T objectToPush);
     T& front() const;
     void popFront();
     int size() const;
-
-
     Queue<T>::Node* getLastNode() const;
     T getData() const;                  //delete my friend
     void checkingIterator() const;
-
     Iterator begin() const;
     Iterator end() const;
 
@@ -51,8 +52,31 @@ Queue<T>::~Queue(){
     }
 }
 
+
+/**  copy constructor Queue*/
+
 template<class T>
-void Queue<T>::pushBack(T objectToPush) {                   //allocate dymnic ?
+Queue<T>::Queue(const Queue<T> &queue) :m_size(queue.size()){
+    for (Iterator it = queue.begin(); it != queue.end(); ++it){
+        this->pushBack(*it);
+    }
+}
+
+
+
+/** operator = of Queue*/
+template<class T>
+Queue<T>& Queue<T>::operator=(const Queue<T>& queue){
+    //self assigment
+    m_size = queue.size();
+    for (Iterator it = queue.begin(); it != queue.end(); ++it){
+        this->pushBack(*it);
+    }
+    return *this;
+}
+
+template<class T>
+void Queue<T>::pushBack(T objectToPush) {
     Queue<T>::Node* node = new Queue<T>::Node(objectToPush);
     Queue<T>::Node *currentLastNode = this->getLastNode();
     if (currentLastNode == nullptr){
@@ -125,24 +149,23 @@ void Queue<T>::checkingIterator() const{
 
 /***------------Queue global functions--------------***/
 template<class T, class Condition>
-        Queue<T> filter(const Queue<T> &queue ,Condition c)
+        Queue<T> filter(const Queue<T> &queue ,Condition condition)
 {
             Queue<T> newQueue;
             for(const T& data : queue) {
-                if (c(data) == true){
+                if (condition(data) == true){
                     newQueue.pushBack(data);
                 }
-
             }
     return newQueue;
 
 }
 
-template<class T, class Transformation>
-void transform(Queue<T> &queue ,Transformation transform)
+template<class T, class Operation>
+void transform(Queue<T> &queue ,Operation operation)
 {
-    for(const T& data : queue){
-        transform(data);
+    for(T& data : queue){
+        operation(data);
     }
 }
 
