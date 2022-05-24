@@ -1,6 +1,3 @@
-//
-// Created by eladm on 21/05/2022.
-//
 
 #ifndef HW3_QUEUE_H
 #define HW3_QUEUE_H
@@ -13,9 +10,8 @@ template<class T>
 class Queue {
 private:
     class Node;
-    Queue<T>::Node* m_head;
     int m_size;
-
+    Queue<T>::Node* m_head;
 
 public:
     class Iterator;
@@ -35,8 +31,7 @@ public:
     void popFront();
     int size() const;
     Queue<T>::Node* getLastNode() const;
-    T getData() const;                  //delete my friend
-    void checkingIterator() const;
+    void checkingIterator() const;                  //keep for possible future tests
     Iterator begin();
     Iterator end();
     ConstIterator begin() const;
@@ -47,7 +42,7 @@ public:
 
 /** Queue Constructor */
 template<class T>
-Queue<T>::Queue():m_head(nullptr),m_size(0) {}
+Queue<T>::Queue():m_size(0), m_head(nullptr) {}
 
 /** Queue Destructor */
 template<class T>
@@ -177,10 +172,6 @@ typename Queue<T>::ConstIterator Queue<T>::end() const  {
 
 
 /***------------Fucntions for testing Queue--------------***/
-template <class T>
-T Queue<T>::getData() const {
-    return this->m_head->m_data;
-}
 
 template <class T>
 void Queue<T>::checkingIterator() const{

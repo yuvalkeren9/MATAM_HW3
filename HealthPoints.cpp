@@ -1,6 +1,3 @@
-//
-// Created by eladm on 21/05/2022.
-//
 
 #include "HealthPoints.h"
 HealthPoints::HealthPoints(int maxHP) :m_currentHP(maxHP),m_MaxHP(maxHP) {
