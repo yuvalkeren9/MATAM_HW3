@@ -109,6 +109,7 @@ void Queue<T>::pushBack(T objectToPush) {
         currentLastNode->m_next = node;
         this->m_size++;
     } catch(std::bad_alloc& e) {
+        throw std::bad_alloc();
     }
 }
 
@@ -176,7 +177,7 @@ typename Queue<T>::ConstIterator Queue<T>::end() const  {
 template <class T>
 void Queue<T>::checkingIterator() const{
     try {
-        for (Iterator it = this->begin(); it != this->end(); ++it ){
+        for (ConstIterator it = this->begin(); it != this->end(); ++it ){
             cout << it.m_ptrToNode->m_data << endl;
         }
     } catch (typename Queue<T>::Iterator::InvalidOperation& e){
@@ -189,14 +190,27 @@ void Queue<T>::checkingIterator() const{
 
 /***------------Queue global functions--------------***/
 template<class T, class Condition>
-Queue<T> filter(Queue<T> &queue ,Condition condition)    //deleted const here
+Queue<T> filter(Queue<T> &queue ,Condition condition)    //deleted const here undeleted
 {
             Queue<T> newQueue;
-            for(T& data : queue) {
+            for(T& data : queue) {    //made change here
                 if (condition(data) == true){
                     newQueue.pushBack(data);
                 }
             }
+    return newQueue;
+
+}
+
+template<class T, class Condition>
+Queue<T> filter(const Queue<T> &queue ,Condition condition)    //deleted const here undeleted
+{
+    Queue<T> newQueue;
+    for(const T& data : queue) {    //made change here
+        if (condition(data) == true){
+            newQueue.pushBack(data);
+        }
+    }
     return newQueue;
 
 }
@@ -208,8 +222,6 @@ void transform(Queue<T> &queue ,Operation operation)
         operation(data);
     }
 }
-
-
 
 /***-----------Iterator implication------------***/
 template<class T>
