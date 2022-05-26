@@ -10,17 +10,21 @@ using std::cout;
 
 template<class T>
 class Queue {
+
 private:
     class Node;
     int m_size;
     Queue<T>::Node* m_head;
 
+
 public:
+    Queue();
+    Queue(const Queue<T>& queue);
+    ~Queue();
+
     class Iterator;
     class ConstIterator;
-    Queue();
-    ~Queue();
-    Queue(const Queue<T>& queue);
+
     class EmptyQueue{};
 
     Queue<T>& operator=(const Queue<T>& queue);
@@ -58,7 +62,6 @@ Queue<T>::~Queue(){
 
 
 /**  copy constructor Queue*/
-
 template<class T>
 Queue<T>::Queue(const Queue<T> &queue) :m_size(queue.size()), m_head(nullptr){
     try {
@@ -67,7 +70,6 @@ Queue<T>::Queue(const Queue<T> &queue) :m_size(queue.size()), m_head(nullptr){
         }
     } catch (typename Queue<T>::ConstIterator::InvalidOperation& e){}
 }
-
 
 
 /** operator== of queue */
@@ -80,6 +82,8 @@ bool operator==(const Queue<S>& queue1, Queue<S>& queue2){
         return false;
     }
 }
+
+
 /** operator = of Queue*/
 template<class T>
 Queue<T>& Queue<T>::operator=(const Queue<T>& queue) {
@@ -97,7 +101,15 @@ Queue<T>& Queue<T>::operator=(const Queue<T>& queue) {
 }
 
 
-
+/**---pushBack method---
+ *
+ *
+ * the function creating new node initialized with the data T and - and linked to the last node
+ *
+ *
+ * @tparam T - the data type
+ * @param objectToPush - the object to push to the end of the Queue (type T)
+ */
 template<class T>
 void Queue<T>::pushBack(T objectToPush) {
     try {
@@ -121,7 +133,12 @@ void Queue<T>::pushBack(T objectToPush) {
 }
 
 
-
+/**---front method----
+ *
+ *
+ * @tparam T the data type
+ * @return the first object (type T) in the Queue
+ */
 template<class T>
 T& Queue<T>::front() const{
     if (this->m_size == 0){
@@ -130,6 +147,14 @@ T& Queue<T>::front() const{
     return this->m_head->m_data;
 }
 
+
+/**---popFront method---
+ *
+ * delete the first object (type T) in the Queue
+ * (checks for empty Queue)
+ *
+ * @tparam T - data type
+ */
 template<class T>
 void Queue<T>::popFront(){
     if (this->m_size == 0){
@@ -147,6 +172,12 @@ void Queue<T>::popFront(){
     }
 }
 
+/**---size method---
+ *
+ *
+ * @tparam T - data type
+ * @return number of objects (type T) in the Queue
+ */
 template<class T>
 int Queue<T>::size() const{
     return this->m_size;
@@ -156,28 +187,26 @@ int Queue<T>::size() const{
 /***------------Queue begin--------------***/
 template<class T>
 typename Queue<T>::Iterator Queue<T>::begin()  {
-    Iterator it(this, this->m_head);
+    Iterator it( this->m_head);
     return it;
 }
 /***------------Queue end--------------***/
 template<class T>
 typename Queue<T>::Iterator Queue<T>::end()  {
-    return Iterator(this, nullptr);
+    return Iterator(nullptr);
 }
 
 /***------------Queue begin const--------------***/
 template<class T>
 typename Queue<T>::ConstIterator Queue<T>::begin() const  {
-    ConstIterator it(this, this->m_head);
+    ConstIterator it(this->m_head);
     return it;
 }
 /***------------Queue end const--------------***/
 template<class T>
 typename Queue<T>::ConstIterator Queue<T>::end() const  {
-    return ConstIterator(this, nullptr);
+    return ConstIterator(nullptr);
 }
-
-
 
 /***------------Fucntions for testing Queue--------------***/
 
@@ -196,7 +225,17 @@ void Queue<T>::checkingIterator() const{
 }
 
 /***------------Queue global functions--------------***/
-
+/**-- filter function ---
+ *
+ * filter function create a new Queue and returns it containing copy of the
+ * objects passed the condition
+ *
+ * @tparam T  - data type
+ * @tparam Condition - bool functor/ function ptr type
+ * @param queue - the Queue that will filtered (not changed)
+ * @param condition  the functor/ function ptr Queue will be filtered by
+ * @return a new Queue contains only the objects (type T) that condition returned true for
+ */
 template<class T, class Condition>
 Queue<T> filter(const Queue<T> &queue ,const Condition condition)
 {
@@ -212,7 +251,17 @@ Queue<T> filter(const Queue<T> &queue ,const Condition condition)
     return newQueue;
 
 }
-
+/**--- transform function --
+ *
+ *
+ * * transform function returns the Queue received after it changed by operation
+ *
+ *
+ * @tparam T - data type
+ * @tparam Operation  functor/ function ptr type
+ * @param queue the Queue that will transformed
+ * @param operation the functor/ function ptr that Queue will be transformed by
+ */
 template<class T, class Operation>
 void transform(Queue<T> &queue ,Operation operation)
 {
