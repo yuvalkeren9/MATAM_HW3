@@ -28,6 +28,11 @@ int main(){
     queue1.checkingIterator();
     cout << endl;
 
+
+    //CHECK THAT MEMORY THINGY REALLY WORKS
+
+
+
     Queue<char> queue_char;
     queue_char.pushBack('h');
     queue_char.pushBack('e');

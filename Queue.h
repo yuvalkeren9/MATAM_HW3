@@ -57,7 +57,7 @@ Queue<T>::~Queue(){
 
 /**  copy constructor Queue*/
 
-template<class T>                          //MAKING CHANGE HERE
+template<class T>
 Queue<T>::Queue(const Queue<T> &queue) :m_size(queue.size()), m_head(nullptr){
     try {
         for (ConstIterator it = queue.begin(); it != queue.end(); ++it) {
@@ -65,8 +65,6 @@ Queue<T>::Queue(const Queue<T> &queue) :m_size(queue.size()), m_head(nullptr){
         }
     } catch (typename Queue<T>::ConstIterator::InvalidOperation& e){}
 }
-
-
 
 
 
@@ -96,6 +94,8 @@ Queue<T>& Queue<T>::operator=(const Queue<T>& queue) {
 
 }
 
+
+
 template<class T>
 void Queue<T>::pushBack(T objectToPush) {
     try {
@@ -109,6 +109,11 @@ void Queue<T>::pushBack(T objectToPush) {
         currentLastNode->m_next = node;
         this->m_size++;
     } catch(std::bad_alloc& e) {
+        while(this->m_head!= nullptr) {
+            Node* toDelete = this->m_head;
+            this->m_head = this->m_head->m_next;
+            delete toDelete;
+        }
         throw std::bad_alloc();
     }
 }
@@ -189,27 +194,18 @@ void Queue<T>::checkingIterator() const{
 }
 
 /***------------Queue global functions--------------***/
-//template<class T, class Condition>
-//Queue<T> filter(Queue<T> &queue ,Condition condition)    //deleted const here undeleted
-//{
-//            Queue<T> newQueue;
-//            for(T& data : queue) {    //made change here
-//                if (condition(data) == true){
-//                    newQueue.pushBack(data);
-//                }
-//            }
-//    return newQueue;
-//
-//}
 
 template<class T, class Condition>
-Queue<T> filter(const Queue<T> &queue ,const Condition condition)    //deleted const here undeleted
+Queue<T> filter(const Queue<T> &queue ,const Condition condition)
 {
     Queue<T> newQueue;
-    for(const T& data : queue) {    //made change here
-        if (condition(data) == true){
-            newQueue.pushBack(data);
+    try {
+        for (const T &data: queue) {
+            if (condition(data) == true) {
+                newQueue.pushBack(data);
+            }
         }
+    } catch (std::bad_alloc& e){
     }
     return newQueue;
 
@@ -223,11 +219,12 @@ void transform(Queue<T> &queue ,Operation operation)
     }
 }
 
+
 /***-----------Iterator implication------------***/
 template<class T>
 class Queue<T>::Iterator{
 private:
-    const Queue<T>* m_queue;
+    //const Queue<T>* m_queue;
     Node* m_ptrToNode;
     Iterator(const Queue<T>* queue, Node* ptrToNode);
     friend class Queue<T>::Node;
@@ -241,7 +238,7 @@ public:
 };
 /** constructor of Iterator */
 template <class T>
-Queue<T>::Iterator::Iterator(const Queue<T>* queue, Node* ptrToNode) : m_queue(queue), m_ptrToNode(ptrToNode){
+Queue<T>::Iterator::Iterator(const Queue<T>* queue, Node* ptrToNode) : m_ptrToNode(ptrToNode){
         }
 
 
@@ -267,14 +264,11 @@ bool Queue<T>::Iterator::operator!=(const Queue<T>::Iterator& iterator) {
 }
 
 
-
-
-
 /** constIterator impleciation */
 template<class T>
 class Queue<T>::ConstIterator {
 private:
-        const Queue<T>* m_queue;
+        //const Queue<T>* m_queue;
         const Node*  m_ptrToNode ;
         ConstIterator(const Queue<T>* queue, Node* const ptrToNode);
         friend class Queue<T>::Node;
@@ -288,7 +282,7 @@ public:
 
 /** constructor of ConstIterator */
 template <class T>
-Queue<T>::ConstIterator::ConstIterator(const Queue<T>* queue, Node* const ptrToNode) : m_queue(queue), m_ptrToNode(ptrToNode){
+Queue<T>::ConstIterator::ConstIterator(const Queue<T>* queue, Node* const ptrToNode) :m_ptrToNode(ptrToNode){
 }
 
 /** opertator* of ConstIterator */
@@ -314,7 +308,6 @@ bool Queue<T>::ConstIterator::operator!=(const Queue<T>::ConstIterator& iterator
 }
 
 
-
 /***-----------Node implication------------***/
 template<class T>
 class Queue<T>::Node{
@@ -336,7 +329,6 @@ template<class T>
 Queue<T>::Node::Node(T data):m_data(data){
     m_next=nullptr;
 }
-
 
 
 
