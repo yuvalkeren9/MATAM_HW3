@@ -6,6 +6,8 @@
 using std::endl;
 using std::cout;
 
+
+
 template<class T>
 class Queue {
 private:
@@ -226,7 +228,7 @@ class Queue<T>::Iterator{
 private:
     //const Queue<T>* m_queue;
     Node* m_ptrToNode;
-    Iterator(const Queue<T>* queue, Node* ptrToNode);
+    explicit Iterator(Node* ptrToNode);
     friend class Queue<T>::Node;
     friend class Queue<T>;
 public:
@@ -238,7 +240,7 @@ public:
 };
 /** constructor of Iterator */
 template <class T>
-Queue<T>::Iterator::Iterator(const Queue<T>* queue, Node* ptrToNode) : m_ptrToNode(ptrToNode){
+Queue<T>::Iterator::Iterator(Node* ptrToNode) : m_ptrToNode(ptrToNode){
         }
 
 
@@ -270,7 +272,7 @@ class Queue<T>::ConstIterator {
 private:
         //const Queue<T>* m_queue;
         const Node*  m_ptrToNode ;
-        ConstIterator(const Queue<T>* queue, Node* const ptrToNode);
+        explicit ConstIterator(Node* const ptrToNode);
         friend class Queue<T>::Node;
         friend class Queue<T>;
 public:
@@ -282,7 +284,7 @@ public:
 
 /** constructor of ConstIterator */
 template <class T>
-Queue<T>::ConstIterator::ConstIterator(const Queue<T>* queue, Node* const ptrToNode) :m_ptrToNode(ptrToNode){
+Queue<T>::ConstIterator::ConstIterator(Node* const ptrToNode) :m_ptrToNode(ptrToNode){
 }
 
 /** opertator* of ConstIterator */
