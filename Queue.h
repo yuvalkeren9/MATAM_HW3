@@ -189,21 +189,21 @@ void Queue<T>::checkingIterator() const{
 }
 
 /***------------Queue global functions--------------***/
-template<class T, class Condition>
-Queue<T> filter(Queue<T> &queue ,Condition condition)    //deleted const here undeleted
-{
-            Queue<T> newQueue;
-            for(T& data : queue) {    //made change here
-                if (condition(data) == true){
-                    newQueue.pushBack(data);
-                }
-            }
-    return newQueue;
+//template<class T, class Condition>
+//Queue<T> filter(Queue<T> &queue ,Condition condition)    //deleted const here undeleted
+//{
+//            Queue<T> newQueue;
+//            for(T& data : queue) {    //made change here
+//                if (condition(data) == true){
+//                    newQueue.pushBack(data);
+//                }
+//            }
+//    return newQueue;
+//
+//}
 
-}
-
 template<class T, class Condition>
-Queue<T> filter(const Queue<T> &queue ,Condition condition)    //deleted const here undeleted
+Queue<T> filter(const Queue<T> &queue ,const Condition condition)    //deleted const here undeleted
 {
     Queue<T> newQueue;
     for(const T& data : queue) {    //made change here
