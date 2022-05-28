@@ -5,18 +5,14 @@ HealthPoints::HealthPoints(int maxHP) :m_currentHP(maxHP),m_MaxHP(maxHP) {
         throw InvalidArgument();
 }
 
-int HealthPoints::getCurrentHP() {
-    return m_currentHP;
-}
-
-int HealthPoints::getMaxHP() {
-    return m_MaxHP;
-}
-
 HealthPoints& HealthPoints::operator+=(const int number){
-    if (m_currentHP + number <= this->m_MaxHP){
+    if ((m_currentHP + number) < 0){
+        this->m_currentHP=0;
+    }
+    else if (m_currentHP + number <= this->m_MaxHP){
         this->m_currentHP += number;
     }
+
     else{
         this->m_currentHP = m_MaxHP;
     }
@@ -35,7 +31,10 @@ HealthPoints operator+(const int number, HealthPoints& healthPoints1){
 
 
 HealthPoints& HealthPoints::operator-=(const int number){
-    if(this->m_currentHP - number >= 0){
+    if ( (m_currentHP - number >= m_MaxHP)){
+        this->m_currentHP = m_MaxHP;
+    }
+    else if(this->m_currentHP - number >= 0){
         this->m_currentHP -= number;
     }
     else{
@@ -49,13 +48,17 @@ HealthPoints operator-(HealthPoints& healthPoints1, const int number){
     return temp-= number;
 }
 
-HealthPoints operator-(const int number, HealthPoints& healthPoints1){
-    HealthPoints temp = healthPoints1;
-    return temp-= number;
-}
+//HealthPoints operator-(const int number, HealthPoints& healthPoints1){
+//    HealthPoints temp = healthPoints1;
+//    return temp-= number;
+//}
 
 
 bool operator==(const HealthPoints& healthPoints1,const HealthPoints& healthPoints2 ){
+    if(healthPoints1.m_currentHP < 0 || healthPoints2.m_currentHP < 0 ){
+        throw HealthPoints::InvalidArgument();
+    }
+
     if (healthPoints1.m_currentHP == healthPoints2.m_currentHP){
         return true;
     }
@@ -111,20 +114,6 @@ bool operator>=(const HealthPoints& healthPoints1, const HealthPoints& healthPoi
 }
 
 std::ostream& operator<<(std::ostream& os, HealthPoints toPrint){
-    os << toPrint.getCurrentHP()<< '(' <<toPrint.getMaxHP()<< ')';
+    os << toPrint.m_currentHP<< '(' <<toPrint.m_MaxHP<< ')';
     return os;
 }
-
-
-/**
-int main (){
-    try {
-        HealthPoints healthpoints1;
-        HealthPoints healthpoints2(150);
-        cout << healthpoints1 << endl;
-        cout << healthpoints2 << endl;
-    } catch (HealthPoints::InvalidArgument& e){
-        cout << "I caught the problem!" << endl;
-    }
-
-}**/

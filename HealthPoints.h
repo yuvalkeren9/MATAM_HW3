@@ -74,14 +74,7 @@ public:
      *
      * @return m_MaxHP
      */
-    int getMaxHP();
-
-   /**
-    * getter for the currentHP member
-    *
-    * @return m_currentHP
-    */
-    int getCurrentHP();
+    friend std::ostream& operator<<(std::ostream& os, HealthPoints toPrint);
 
    /**
     * class type for returning InvalidArgument exception
@@ -102,7 +95,7 @@ private:
 HealthPoints operator+(HealthPoints& healthPoints1, const int number);
 HealthPoints operator+(const int number, HealthPoints& healthPoints1);
 HealthPoints operator-(HealthPoints& healthPoints1, const int number);
-HealthPoints operator-(const int number, HealthPoints& healthPoints1);
+//HealthPoints operator-(const int number, HealthPoints& healthPoints1);
 
 
 /** overloading the diffrent bool operators for comparing HealthPoints type */

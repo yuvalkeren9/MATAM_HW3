@@ -63,7 +63,7 @@ Queue<T>::~Queue(){
 
 /**  copy constructor Queue*/
 template<class T>
-Queue<T>::Queue(const Queue<T> &queue) :m_size(queue.size()), m_head(nullptr){
+Queue<T>::Queue(const Queue<T> &queue) :m_size(0), m_head(nullptr){
     try {
         for (ConstIterator it = queue.begin(); it != queue.end(); ++it) {
             this->pushBack(*it);
@@ -90,7 +90,12 @@ Queue<T>& Queue<T>::operator=(const Queue<T>& queue) {
     if (this == &queue){
         return *this;
     }
-    m_size = queue.size();
+    m_size = 0;
+    while(this->m_head!= nullptr) {
+        Node *toDelete = this->m_head;
+        this->m_head = this->m_head->m_next;
+        delete toDelete;
+    }
     try {
         for (ConstIterator it = queue.begin(); it != queue.end(); ++it) {
             this->pushBack(*it);
@@ -241,7 +246,7 @@ Queue<T> filter(const Queue<T> &queue ,const Condition condition)
 {
     Queue<T> newQueue;
     try {
-        for (const T &data: queue) {
+        for ( T data: queue) {
             if (condition(data) == true) {
                 newQueue.pushBack(data);
             }
@@ -320,7 +325,7 @@ template<class T>
 class Queue<T>::ConstIterator {
 private:
         //const Queue<T>* m_queue;
-        const Node*  m_ptrToNode ;
+        Node*  m_ptrToNode ;
         explicit ConstIterator(Node* const ptrToNode);
         friend class Queue<T>::Node;
         friend class Queue<T>;
