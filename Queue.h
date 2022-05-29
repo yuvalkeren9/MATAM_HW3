@@ -93,21 +93,35 @@ Queue<T>& Queue<T>::operator=(const Queue<T>& queue) {
     if (this == &queue){
         return *this;
     }
-    m_size = 0;
-    Queue<T>* tempQueue = new Queue<T>;   //pointer to a new que;
+    Queue<T>::Node *newHead = nullptr;
     try {
-        for (ConstIterator it = queue.begin(); it != queue.end(); ++it) {
-            tempQueue->pushBack(*it);
+        for (const T &data: queue) {
+            Queue<T>::Node *tempNode = new Queue<T>::Node(data);
+            if (newHead == nullptr) {
+                newHead = tempNode;
+                continue;
+            }
+            Queue<T>::Node *temp = newHead;
+            while (temp->m_next != nullptr) {
+                temp = temp->m_next;
+            }
+            temp->m_next = tempNode;
         }
-    } catch (typename Queue<T>::ConstIterator::InvalidOperation& e){}
+    } catch (std::bad_alloc){
+        while (newHead != nullptr){
+            Node* toDelete = newHead;
+            newHead = newHead->m_next;
+            delete toDelete;
+        }
+        return *this;
+    }
     while(this->m_head!= nullptr) {                   //if we got here, then copying worked! we can safely delete data from old queue
         Node *toDelete = this->m_head;
         this->m_head = this->m_head->m_next;
         delete toDelete;
     }
-    this->m_head = tempQueue->getHead();    //need to make a "get head" method //I made one :)
-    this->m_size = tempQueue->size();
-    delete tempQueue;
+    this->m_head = newHead;
+    this->m_size = queue.size();
     return *this;
 
 }

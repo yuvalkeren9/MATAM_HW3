@@ -85,6 +85,10 @@ int main(){
     testing = queue1;
     cout <<"this is after hasama, and the size is: " << testing.size() << endl;
     testing.checkingIterator();
+    Queue<int> testing1;
+    testing = testing1;
+    cout <<"this is after hasama, and the size is: " << testing.size() << endl;
+    testing.checkingIterator();
 
 
 
