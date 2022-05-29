@@ -107,14 +107,23 @@ Queue<T>& Queue<T>::operator=(const Queue<T>& queue) {
             }
             temp->m_next = tempNode;
         }
-    } catch (std::bad_alloc){
+    } catch (std::bad_alloc& e){
         while (newHead != nullptr){
             Node* toDelete = newHead;
             newHead = newHead->m_next;
             delete toDelete;
         }
-        return *this;
+        throw std::bad_alloc();
     }
+    catch (typename Queue<T>::ConstIterator::InvalidOperation& e){
+        while (newHead != nullptr){
+            Node* toDelete = newHead;
+            newHead = newHead->m_next;
+            delete toDelete;
+        }
+        throw typename Queue<T>::ConstIterator::InvalidOperation();
+    }
+
     while(this->m_head!= nullptr) {                   //if we got here, then copying worked! we can safely delete data from old queue
         Node *toDelete = this->m_head;
         this->m_head = this->m_head->m_next;
@@ -273,6 +282,7 @@ Queue<T> filter(const Queue<T> &queue ,const Condition condition)
             }
         }
     } catch (std::bad_alloc& e){
+        throw std::bad_alloc(); //maybe delete?
     }
     return newQueue;
 
