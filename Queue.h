@@ -91,6 +91,7 @@ Queue<T>& Queue<T>::operator=(const Queue<T>& queue) {
         return *this;
     }
     m_size = 0;
+    Queue<T> tempQueue = queue;
     while(this->m_head!= nullptr) {
         Node *toDelete = this->m_head;
         this->m_head = this->m_head->m_next;
@@ -100,7 +101,19 @@ Queue<T>& Queue<T>::operator=(const Queue<T>& queue) {
         for (ConstIterator it = queue.begin(); it != queue.end(); ++it) {
             this->pushBack(*it);
         }
-    } catch (typename Queue<T>::ConstIterator::InvalidOperation& e){}
+    } catch (typename Queue<T>::ConstIterator::InvalidOperation& e){
+        queue.m_head = nullptr;
+//        for ( T& data : tempQueue){
+//            Queue<T>::Node* tempPtr = this->m_head;
+//            if (this->m_head != nullptr) {
+//                while (tempPtr->m_next != nullptr) {
+//                    tempPtr = tempPtr->m_next;
+//                }
+//            }
+//            tempPtr->m_data = data;
+//            tempPtr->m_next = &data;
+//        }
+    }
     return *this;
 
 }
@@ -246,7 +259,7 @@ Queue<T> filter(const Queue<T> &queue ,const Condition condition)
 {
     Queue<T> newQueue;
     try {
-        for ( T data: queue) {
+        for (const T& data: queue) {
             if (condition(data) == true) {
                 newQueue.pushBack(data);
             }
