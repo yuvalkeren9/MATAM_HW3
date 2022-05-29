@@ -26,6 +26,9 @@ public:
     class ConstIterator;
 
     class EmptyQueue{};
+    Queue<T>::Node* getHead(){
+        return m_head;
+    }
 
     Queue<T>& operator=(const Queue<T>& queue);
 
@@ -91,29 +94,20 @@ Queue<T>& Queue<T>::operator=(const Queue<T>& queue) {
         return *this;
     }
     m_size = 0;
-    Queue<T> tempQueue = queue;
-    while(this->m_head!= nullptr) {
+    Queue<T>* tempQueue = new Queue<T>;   //pointer to a new que;
+    try {
+        for (ConstIterator it = queue.begin(); it != queue.end(); ++it) {
+            tempQueue->pushBack(*it);
+        }
+    } catch (typename Queue<T>::ConstIterator::InvalidOperation& e){}
+    while(this->m_head!= nullptr) {                   //if we got here, then copying worked! we can safely delete data from old queue
         Node *toDelete = this->m_head;
         this->m_head = this->m_head->m_next;
         delete toDelete;
     }
-    try {
-        for (ConstIterator it = queue.begin(); it != queue.end(); ++it) {
-            this->pushBack(*it);
-        }
-    } catch (typename Queue<T>::ConstIterator::InvalidOperation& e){
-        queue.m_head = nullptr;
-//        for ( T& data : tempQueue){
-//            Queue<T>::Node* tempPtr = this->m_head;
-//            if (this->m_head != nullptr) {
-//                while (tempPtr->m_next != nullptr) {
-//                    tempPtr = tempPtr->m_next;
-//                }
-//            }
-//            tempPtr->m_data = data;
-//            tempPtr->m_next = &data;
-//        }
-    }
+    this->m_head = tempQueue->getHead();    //need to make a "get head" method //I made one :)
+    this->m_size = tempQueue->size();
+    delete tempQueue;
     return *this;
 
 }

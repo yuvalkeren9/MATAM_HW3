@@ -75,6 +75,18 @@ int main(){
     queue1.pushBack(4);
     queue1.checkingIterator();
     cout << endl;
+    Queue<int> testing;
+    testing.pushBack(20);
+    testing.pushBack(20);
+    testing.pushBack(20);
+    cout <<"this is testing before hasama" <<endl;
+    testing.checkingIterator();
+    cout <<endl;
+    testing = queue1;
+    cout <<"this is after hasama, and the size is: " << testing.size() << endl;
+    testing.checkingIterator();
+
+
 
 
     int swag1 = 1;
